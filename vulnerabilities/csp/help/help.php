@@ -18,7 +18,17 @@
 
 		<h3>Low Level</h3>
 		<p>Examine the policy to find all the sources that can be used to host external script files.</p>
-		<pre>Spoiler: <span class="spoiler">Scripts can be included from Pastebin or Toptal (use to be Hastebin), try storing some JavaScript on there and then loading it in.</span></pre>
+		<p>This exercise was originally written to work with Pastebin, then updated for Hastebin, then Toptal, but all these stopped working as they set various headers that prevent the browser executing the JavaScript once it has downloaded it. Since then two new services have been identified, UNPKG and jsDelivr, the first is a proxy for NPM packages, the second one for GitHub files. They are both designed to allow raw access to any files and do not set any headers that will stop injection.
+		</p>
+		<p>I have also put a number of files on my site which help to demonstrate how different headers and file extensions can block execution.</p>
+		<pre>Spoiler: <span class="spoiler">
+https://cdn.jsdelivr.net/gh/digininja/csp_bypass/alert.js - Using jsDelivr to server a JavaScript file stored on GitHub.
+https://unpkg.com/@digininja/csp_bypass@1.0.0/index.js - Using UNPKG to access a JavaScript file in an NPM package.
+https://digi.ninja/dvwa/alert.js - Will work, this is a normal JavaScript file served with the correct headers.
+https://digi.ninja/dvwa/alert.txt - This will not work as it has the wrong content type set by the web server due to its file extension.
+https://digi.ninja/dvwa/cookie.js - This will work and will show your cookies
+https://digi.ninja/dvwa/forced_download.js - As the name says, the server sets the "Content-Disposition: attachment" header for this to force the browser to download it rather than execute it.
+https://digi.ninja/dvwa/wrong_content_type.js - This will not work as the web server ignores the file extension and forces the content type to get set as "plain/text" which prevents the browser executing it.</span></pre>
 
 		<br />
 
@@ -50,3 +60,4 @@
 	<p>Reference: <?php echo dvwaExternalLinkUrlGet( 'https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP', "Mozilla Developer Network - CSP: script-src"); ?></p>
 	<p>Reference: <?php echo dvwaExternalLinkUrlGet( 'https://blog.mozilla.org/security/2014/10/04/csp-for-the-web-we-have/', "Mozilla Security Blog - CSP for the web we have" ); ?></p>
 </div>
+

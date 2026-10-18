@@ -24,7 +24,7 @@ Nous ne sommes pas responsables de la manière dont vous utilisez BAWV. Nous avo
 
 ## License
 
-Ce fichier fait parie du bordel d'application web vulnérable (BAWV)
+Ce fichier fait partie du bordel d'application web vulnérable (BAWV)
 
 Bordel d'application web vulnérable (BAWV) est un logiciel libre: vous pouvez le re-distribuer et/ou le modifier en respectant les termes de la licence publique générale GNU (GNU General Public License) tel que publié par
 La fondation des logiciels libres (the Free Software Foundation),
@@ -49,7 +49,7 @@ Si vous souhaitez contribuer à la traduction, faite une demande d'extraction (p
 
 - - -
 
-##Téléchargement
+## Téléchargement
 
 Même s'il y a diverses versions de BAVW, la seule version soutenue via cette source du dépôt GitHub est celle-ci. Vous pouvez la cloner depuis le dépôt suivant :
 
@@ -61,6 +61,49 @@ Ou [télécharger le fichier zippé](https://github.com/digininja/DVWA/archive/m
 - - -
 
 ## Installation
+
+### Installation Automatisée 🛠️
+
+**Remarque : ce n'est pas un script officiel de DVWA, il a été écrit par [@IamCarron](https://github.com/IamCarron) et est maintenu sur [DVWA-Script](https://github.com/IamCarron/DVWA-Script). Beaucoup d'efforts ont été consacrés à sa création et à sa vérification, mais il est recommandé d'inspecter le script avant de l'exécuter sur votre système. Veuillez signaler tout bogue sur le [dépôt DVWA-Script](https://github.com/IamCarron/DVWA-Script), et non ici.**
+
+Un script d'installation automatisée pour DVWA sur les systèmes basés sur Debian (notamment Kali, Ubuntu, Kubuntu, Linux Mint, Zorin OS...). Il installe automatiquement toutes les dépendances requises, configure PHP/Apache et initialise les tables de la base de données prêtes pour la connexion (`admin` / `password`).
+
+**Remarque : Ce script nécessite les privilèges root et est adapté aux systèmes basés sur Debian. Assurez-vous de l'exécuter en tant qu'utilisateur root.**
+
+#### Prérequis d'installation
+
+- **Système d'exploitation :** Distributions basées sur Debian (Kali, Ubuntu, Kubuntu, Linux Mint, Zorin OS, etc.)
+- **Privilèges :** Exécuter en tant qu'utilisateur root
+
+#### Étapes d'installation
+
+##### En une seule ligne (One-Liner)
+
+Cette commande télécharge le script d'installation écrit par [@IamCarron](https://github.com/IamCarron) et l'exécute automatiquement :
+
+```sh
+sudo bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh)"
+```
+
+##### Exécution manuelle du script
+
+1. **Téléchargez le script :**
+
+   ```sh
+   wget https://raw.githubusercontent.com/IamCarron/DVWA-Script/main/Install-DVWA.sh
+   ```
+
+2. **Rendez le script exécutable :**
+
+   ```sh
+   chmod +x Install-DVWA.sh
+   ```
+
+3. **Exécutez-le en tant que root :**
+
+   ```sh
+   sudo ./Install-DVWA.sh
+   ```
 
 **Soyez sûrs que le fichier config/config.inc.php existe. Avoir le fichier config.inc.php.dist ne suffira pas, vous devrez le modifier par rapport à votre environnement et le renommer config.inc.php. [Windows cachera peut-être l'extension](https://lecrabeinfo.net/afficher-extensions-noms-de-fichiers-dans-windows.html)**
 
@@ -171,6 +214,27 @@ _Cette section du fichier à été ajouté par @thegrims, pour de l'aide à prop
 `docker run --rm -it -p 80:80 vulnerables/web-dvwa`
 
 Soyez sûrs d'utiliser AUFS à cause d'erreurs antérieurs de MySQL. Lancez `docker info` pour vérifier le stockage de votre lecteur. Si il n'est pas en AUFS, veuillez le changer. Il y a un manuel pour chaque SE (OS), mais il sont tellement différents que nous n'aborderons pas ce sujet.
+
+### Construction locale
+
+Si vous avez fais des changements et voulez construire le projet à partir de votre version locale, editez le fichier `compose.yml` et changez `pull_policy: always` par `pull_policy: build`.
+
+Exécuter la commande `docker compose up -d` va déclancher Docker à construire une image à partir de votre version locale, sans regard sur ce qui est disponible dans le registre.
+
+Pour plus d'informations (En anglais): [`pull_policy`](https://github.com/compose-spec/compose-spec/blob/master/05-services.md#pull_policy).
+
+### Servir les fichiers locaux
+
+Si vous faites des changements et ne voulez pas avoir à reconstruire l'image après chaque changement :
+
+1. Éditer le fichier `compose.yml` et décommenter :
+    ```
+        # volumes:
+        #   - ./:/var/www/html
+    ```
+2. Exécuter `cp config/config.inc.php.dist config/config.inc.php` pour copier le fichier de configuration par défaut.
+3. Exécuter `docker compose up -d` et les changements au fichiers locaux seront réfléchies sur le conteneur.
+
 - - -
 
 ## Dépannage

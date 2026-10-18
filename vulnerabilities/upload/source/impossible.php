@@ -4,7 +4,6 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 	// Check Anti-CSRF token
 	checkToken( $_REQUEST[ 'user_token' ], $_SESSION[ 'session_token' ], 'index.php' );
 
-
 	// File information
 	$uploaded_name = $_FILES[ 'uploaded' ][ 'name' ];
 	$uploaded_ext  = substr( $uploaded_name, strrpos( $uploaded_name, '.' ) + 1);
@@ -15,9 +14,13 @@ if( isset( $_POST[ 'Upload' ] ) ) {
 	// Where are we going to be writing to?
 	$target_path   = DVWA_WEB_PAGE_TO_ROOT . 'hackable/uploads/';
 	//$target_file   = basename( $uploaded_name, '.' . $uploaded_ext ) . '-';
-	$target_file   =  md5( uniqid() . $uploaded_name ) . '.' . $uploaded_ext;
+
+	// Generate a single random name
+	$random_name   =  bin2hex( random_bytes(16) ) . '.' . $uploaded_ext;
+
+	$target_file   =  $random_name;
 	$temp_file     = ( ( ini_get( 'upload_tmp_dir' ) == '' ) ? ( sys_get_temp_dir() ) : ( ini_get( 'upload_tmp_dir' ) ) );
-	$temp_file    .= DIRECTORY_SEPARATOR . md5( uniqid() . $uploaded_name ) . '.' . $uploaded_ext;
+	$temp_file    .= DIRECTORY_SEPARATOR . $random_name;
 
 	// Is it an image?
 	if( ( strtolower( $uploaded_ext ) == 'jpg' || strtolower( $uploaded_ext ) == 'jpeg' || strtolower( $uploaded_ext ) == 'png' ) &&

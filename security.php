@@ -32,6 +32,7 @@ if( isset( $_POST['seclev_submit'] ) ) {
 
 	dvwaSecurityLevelSet( $securityLevel );
 	dvwaMessagePush( "Security level set to {$securityLevel}" );
+	dvwa_start_session();
 	dvwaPageReload();
 }
 
@@ -74,6 +75,13 @@ $page[ 'body' ] .= "
 		<input type=\"submit\" value=\"Submit\" name=\"seclev_submit\">
 		" . tokenField() . "
 	</form>
+	
+	<br>
+	<br>
+	<h2>Additional Tools</h2>
+	<ul>
+		<li><a href=\"" . DVWA_WEB_PAGE_TO_ROOT . "vulnerabilities/bac/log_viewer.php\">View Broken Access Control Logs</a> - View access logs for the Broken Access Control vulnerability</li>
+	</ul>
 </div>";
 
 dvwaHtmlEcho( $page );
